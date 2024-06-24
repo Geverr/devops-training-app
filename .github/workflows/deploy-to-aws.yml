@@ -13,6 +13,11 @@ jobs:
             AWS_REGION: us-east-1
 
         steps:
+            - name: Print AWS Environment Variables
+              run: |
+                  echo "AWS_ACCESS_KEY_ID is $AWS_ACCESS_KEY_ID"
+                  echo "AWS_SECRET_ACCESS_KEY is $AWS_SECRET_ACCESS_KEY"
+
             - name: Checkout code
               uses: actions/checkout@v3
 
