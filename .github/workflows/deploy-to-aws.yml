@@ -24,12 +24,19 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v3
 
-            - name: Configure AWS credentials
-              uses: aws-actions/configure-aws-credentials@v1
-              with:
-                  aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-                  aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-                  aws-region: ${{ env.AWS_REGION }}
+            # - name: Configure AWS credentials
+            #   uses: aws-actions/configure-aws-credentials@v1
+            #   with:
+            #       aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+            #       aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+            #       aws-region: ${{ env.AWS_REGION }}
+
+            - name: Log in to Amazon ECR
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              run: |
+                  aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 248184751550.dkr.ecr.us-west-2.amazonaws.com
 
             - name: Login to Amazon ECR
               id: login-ecr
@@ -38,7 +45,7 @@ jobs:
             - name: Build, tag, and push image to Amazon ECR
               env:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                  ECR_REPOSITORY: ori-app
+                  ECR_REPOSITORY: ori
                   IMAGE_TAG: latest
               run: |
                   docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
