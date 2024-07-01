@@ -23,7 +23,7 @@ jobs:
 
             - name: Debug environment variables
               run: |
-                  echo "AWS Region: ${{ secrets.AWS_REGION }}"
+                  echo "AWS Region: ${{ env.AWS_REGION }}"
                   echo "AWS Access Key ID: [hidden]"
                   echo "AWS Secret Access Key: [hidden]"
 
