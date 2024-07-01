@@ -7,43 +7,37 @@ on:
 
 jobs:
     build-and-deploy:
-        env:
-            AWS_REGION: ${{ secrets.AWS_REGION }}
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        # env:
+        #     AWS_REGION: ${{ secrets.AWS_REGION }}
+        #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
         runs-on: ubuntu-latest
 
         steps:
-            - name: Print AWS Environment Variables
-              run: |
-                  echo "AWS_ACCESS_KEY_ID is $AWS_ACCESS_KEY_ID"
-                  echo "AWS_SECRET_ACCESS_KEY is $AWS_SECRET_ACCESS_KEY"
-                  echo "AWS_REGION is $AWS_REGION"
-
             - name: Checkout repo
               uses: actions/checkout@v3
 
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v2
 
-            # - name: Configure AWS credentials
-            #   uses: aws-actions/configure-aws-credentials@v1
-            #   with:
-            #       aws-region: ${{ env.AWS_REGION }}
-            #       aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-            #       aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-region: ${{ env.AWS_REGION }}
+                  aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
 
-            - name: Configure AWS Credentials
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  AWS_REGION: ${{ secrets.AWS_REGION }}
-              run: |
-                  echo "Configuring AWS CLI Credentials"
-                  aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-                  aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-                  aws configure set aws_region $AWS_REGION
+            # - name: Setup AWS Credentials Manually
+            #   env:
+            #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            #       AWS_REGION: ${{ secrets.AWS_REGION }}
+            #   run: |
+            #       echo "Configuring AWS CLI Credentials"
+            #       aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            #       aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            #       aws configure set aws_region $AWS_REGION
 
             # - name: Log in to Amazon ECR
             #   env:
