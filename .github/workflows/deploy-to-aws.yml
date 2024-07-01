@@ -7,12 +7,13 @@ on:
 
 jobs:
     build-and-deploy:
+        runs-on: ubuntu-latest
+        environment: prod
+
         env:
             AWS_REGION: ${{ vars.prod.AWS_REGION }}
             AWS_ACCESS_KEY_ID: ${{ secrets.prod.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.prod.AWS_SECRET_ACCESS_KEY }}
-
-        runs-on: ubuntu-latest
 
         steps:
             - name: Checkout repo
